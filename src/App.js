@@ -1,8 +1,8 @@
-import MainMap from "./components/MainMap";
+import Routes from "./route/route";
 
 function App() {
   return (
-    <MainMap/>
+    <Routes />
   );
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const mapStyle = {
-  height: "100vh"
+  height: "90vh"
 };
 
 const MainMap = () => {
