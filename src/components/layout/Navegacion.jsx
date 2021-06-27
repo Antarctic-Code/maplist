@@ -25,15 +25,12 @@ const Navegacion = () => {
   return (
     
     <aside className="sidebar">
-      <button         
-        type="button" 
-        onClick={handleClick}                
-      >
-        <i className="fas fa-bars" />
-      </button>
-      { menu ? (
+      
+          <Link to={"/location"} className="btn btn-verde nvo-general"> 
+            <i className="fas fa-plus-circle"></i>
+            ADD
+        </Link>
         <Locations/>
-      ) : ''}
     </aside>
   );
 };
