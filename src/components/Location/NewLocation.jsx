@@ -82,7 +82,7 @@ const NewLocation = ({ history }) => {
   //Validar el formulario
   const validarLocation = () => {
     let valido =
-      location.titulo.length && location.direccion.length && location.lat>0 && location.lng>0;
+      location.titulo.length && location.direccion.length;
     return !valido;
   };
 
