@@ -6,6 +6,7 @@ const Location = (props) => {
 
   return (
     <Link to={"/location/" + id} className="btn btn-azul">
+    <i className="fa fa-map-marker" aria-hidden="true"></i>
       {titulo}
     </Link>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useMemo,useRef } from "react";
+import React, { useState,useMemo,useRef,useEffect } from "react";
 import clienteAxios from "../../config/axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Swal from "sweetalert2";
@@ -7,10 +7,10 @@ import { withRouter } from "react-router-dom";
 
 const mapStyle = {
   height: '40vh',
-  width: '60vh'
+  width: '100%'
 };
 
-const NewLocation = ({ history }) => {
+const NewLocation = ({ history,match }) => {
   //Trabajar con el state
   // location = state, gurardarLocation  funciona para guardar el state
   const [location, gurardarLocation] = useState({
@@ -20,6 +20,52 @@ const NewLocation = ({ history }) => {
     lng: -79.52108424083316,
     userId: 1,
   });
+
+
+  const {id}= match.params;
+
+  if(id){
+    console.log(id);
+  }
+  else {
+    console.log('no id')
+  }
+
+  //user effect es similar a componetdidmont y willmount
+  useEffect(() => {
+    //Query a la API
+    const consultaAPI = () => {
+      clienteAxios
+        .get("/place/"+id, {
+          /*headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },*/
+        })
+        .then((res) => {
+          //colocar  resultado en el state
+
+          gurardarLocation({
+            titulo: res.data.titulo,
+            direccion: res.data.direccion,
+            lat: res.data.ubicacion.coordinates[0],
+            lng: res.data.ubicacion.coordinates[1],
+            id: res.data.id
+          });
+          console.log(res.data);
+
+        })/*
+        .catch((err) => {
+          if (err.response.sratus === 500) props.history.push("/login");
+        });*/
+    };
+
+    if(id){
+    consultaAPI();
+    }
+    else {
+      console.log('no id')
+    }
+  }, [id]);
 
   //Query a la API
   const handleSubmit = (e) => {
@@ -59,7 +105,8 @@ const NewLocation = ({ history }) => {
         const marker = markerRef.current
         if (marker != null) {
           const newmarket = marker.getLatLng();
-          console.log(newmarket)
+          console.log(newmarket);
+          console.log(location);
           gurardarLocation({
             ...location,
             lat: newmarket.lat,
@@ -68,7 +115,7 @@ const NewLocation = ({ history }) => {
         }
       },
     }),
-    [],
+    [location],
   )
 
   const handleChange = (e) => {
@@ -87,29 +134,33 @@ const NewLocation = ({ history }) => {
   };
 
   return (
-    <>
+    <div class="container">
       <h2>Guardar Lugar</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>        
         <legend>Llena todos los campos</legend>
-        <div className="campo">
+        <div className="form-group">
           <label>Titulo:</label>
           <input
+            className="form-control"
             type="text"
             placeholder="Nombre Location"
             name="titulo"
+            value={location.titulo}
             onChange={handleChange}
           />
         </div>
-        <div className="campo">
+        <div className="form-group">
           <label>Direccion:</label>
           <input
+            className="form-control"
             type="text"
             placeholder="Direccion"
             name="direccion"
+            value={location.direccion}
             onChange={handleChange}
           />
         </div>
-        <div className="campo">          
+        <div className="form-group">          
           <MapContainer center={[location.lat, location.lng]} zoom={19} style={mapStyle} scrollWheelZoom={false}>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -128,9 +179,10 @@ const NewLocation = ({ history }) => {
             </Marker>
           </MapContainer>
         </div>
-        <div className="campo">
+        <div className="form-group">
           <label>Latitud:</label>
           <input
+            className="form-control"
             type="number"
             placeholder="Latitud"
             name="lat"
@@ -138,9 +190,10 @@ const NewLocation = ({ history }) => {
             value={location.lat}
           />
         </div>
-        <div className="campo">
+        <div className="form-group">
           <label>Longitud:</label>
           <input
+            className="form-control"
             type="number"
             placeholder="Longitud"
             name="lng"
@@ -151,13 +204,13 @@ const NewLocation = ({ history }) => {
         <div className="enviar">
           <input
             type="submit"
-            className="btn btn-azul"
+            className="btn btn-primary"
             value="Guardar Lugar"
             disabled={validarLocation()}
           />
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

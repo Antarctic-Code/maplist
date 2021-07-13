@@ -41,7 +41,7 @@ const MainMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {locations.map((location) => (
-          <Marker position={location.ubicacion.coordinates}>
+          <Marker key={location.id} position={location.ubicacion.coordinates}>
             <Popup>
               <h1>{location.titulo}</h1>
               <p>{location.ubicacion.coordinates[0]},{location.ubicacion.coordinates[1]}</p>

@@ -20,6 +20,7 @@ const route = () => {
             <Switch>
               <Route exact path="/" component={MainMap} />
               <Route exact path="/location" component={NewLocation} />
+              <Route exact path="/location/:id" component={NewLocation} />
               <Route exact path="*" component={NotFound} />
             </Switch>
         </div>

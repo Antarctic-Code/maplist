@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment/*, useContext*/ } from "react";
+import React, { useState, useEffect/*, useContext*/ } from "react";
 import clienteAxios from "../../config/axios";
 import Location from "./Location";
 //import Spinner from "../layout/Spinner";
