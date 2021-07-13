@@ -1,6 +1,6 @@
 import React, { useState,useMemo,useRef,useEffect } from "react";
 import clienteAxios from "../../config/axios";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup,useMap } from "react-leaflet";
 import Swal from "sweetalert2";
 import { withRouter } from "react-router-dom";
 //Importar el context
@@ -20,6 +20,7 @@ const NewLocation = ({ history,match }) => {
     lng: -79.52108424083316,
     userId: 1,
   });
+  const mapRef = useRef();
 
 
   const {id}= match.params;
@@ -43,15 +44,14 @@ const NewLocation = ({ history,match }) => {
         })
         .then((res) => {
           //colocar  resultado en el state
-
           gurardarLocation({
             titulo: res.data.titulo,
             direccion: res.data.direccion,
             lat: res.data.ubicacion.coordinates[0],
-            lng: res.data.ubicacion.coordinates[1],
-            id: res.data.id
-          });
+            lng: res.data.ubicacion.coordinates[1]
+          });         
           console.log(res.data);
+          //mapRef.current.setView([res.data.ubicacion.coordinates[0],res.data.ubicacion.coordinates[1]],19);
 
         })/*
         .catch((err) => {
@@ -67,12 +67,15 @@ const NewLocation = ({ history,match }) => {
     }
   }, [id]);
 
+
+ 
   //Query a la API
   const handleSubmit = (e) => {
     e.preventDefault();
-    clienteAxios
-      .post(
-        "/place",
+    if(id){      
+      clienteAxios
+      .put(
+        "/place/"+id,
         location /*,{
                 headers: {
                 'Authorization': `Bearer ${auth.token}`
@@ -82,7 +85,7 @@ const NewLocation = ({ history,match }) => {
       .then((res) => {
         //console.log('res :', res);
         Swal.fire(
-          "Lugar Guardado correctamente!",
+          "Lugar Actualizado correctamente!",
           "You clicked the button!",
           "success"
         );
@@ -96,6 +99,36 @@ const NewLocation = ({ history,match }) => {
           text: "Something went wrong!",
         });
       });
+    }
+    else {
+      clienteAxios
+        .post(
+          "/place",
+          location /*,{
+                  headers: {
+                  'Authorization': `Bearer ${auth.token}`
+                  }
+              }*/
+        )
+        .then((res) => {
+          //console.log('res :', res);
+          Swal.fire(
+            "Lugar Guardado correctamente!",
+            "You clicked the button!",
+            "success"
+          );
+          //redireccionar
+          history.push("/");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        });
+
+    }
   };
 
   const markerRef = useRef(null)
@@ -161,7 +194,7 @@ const NewLocation = ({ history,match }) => {
           />
         </div>
         <div className="form-group">          
-          <MapContainer center={[location.lat, location.lng]} zoom={19} style={mapStyle} scrollWheelZoom={false}>
+          <MapContainer ref={mapRef} center={[location.lat,location.lng]} zoom={19} style={mapStyle} scrollWheelZoom={false}>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -205,7 +238,7 @@ const NewLocation = ({ history,match }) => {
           <input
             type="submit"
             className="btn btn-primary"
-            value="Guardar Lugar"
+            value={id?'Actualizar Lugar':"Guardar Lugar"}
             disabled={validarLocation()}
           />
         </div>
