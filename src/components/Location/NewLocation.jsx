@@ -16,8 +16,8 @@ const NewLocation = ({ history,match }) => {
   const [location, gurardarLocation] = useState({
     titulo: "",
     direccion: "",
-    lat: 9.004575579774295,
-    lng: -79.52108424083316,
+    lat: 8.997118309714862,
+    lng: -79.50771331787111,
     userId: 1,
   });
   const mapRef = useRef();
@@ -194,7 +194,7 @@ const NewLocation = ({ history,match }) => {
           />
         </div>
         <div className="form-group">          
-          <MapContainer ref={mapRef} center={[location.lat,location.lng]} zoom={19} style={mapStyle} scrollWheelZoom={false}>
+          <MapContainer ref={mapRef} center={[location.lat,location.lng]} zoom={16} style={mapStyle} scrollWheelZoom={false}>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

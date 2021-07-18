@@ -10,7 +10,7 @@ const mapStyle = {
 
 
 const MainMap = () => {
-  const center = [9.004575579774295, -79.52108424083316];
+  const center = [8.997118309714862, -79.50771331787111];
   const [locations, setLocations] = useState([]);
 
   //user effect es similar a componetdidmont y willmount
@@ -35,7 +35,7 @@ const MainMap = () => {
   }, [locations]);
   
   return (
-    <MapContainer center={center} zoom={19} style={mapStyle} scrollWheelZoom={false}>
+    <MapContainer center={center} zoom={16} style={mapStyle} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
